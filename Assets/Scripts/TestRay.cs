@@ -39,7 +39,7 @@ public class TestRay : MonoBehaviour
 
     private void Update()
     {
-        Score.Sort((x, y) => -y.CompareTo(x));
+        
         if (timerRunning == true)
             {
                 timeStart += Time.deltaTime;
@@ -65,21 +65,21 @@ public class TestRay : MonoBehaviour
                                     Leader.SetActive(true);
                                     Score.Add(timeStart);
                                     foreach (float Score in Score)
-                                    {
-                                        if (timeStart != Score) 
-                                        {   
-                                            Run1.text += "\n";
-                                            Run1.text += Score;                                           
-                                        }
-                                    }    
+                                            {
+                                                if (timeStart != Score) 
+                                                {   
+                                                    Run1.text += "\n";
+                                                    Run1.text += Score;                                           
+                                                }
+                                            }
+                                       
                                 }    
                                     if(_hit.transform.tag == "ButtonStart")
                                         {   
                                             timeStart = 0; 
                                             timerRunning = true;
                                             WallStart.SetActive(false);
-                                            TimeHud.SetActive(true); 
-                                                                                           
+                                            TimeHud.SetActive(true);                                               
                                         } 
 
                                         if(_hit.transform.tag == "Restart")
@@ -88,7 +88,8 @@ public class TestRay : MonoBehaviour
                                             TimeHud.SetActive(false);
                                             transform.position = RestartRun;               
                                             Leader.SetActive(false);
-
+                                            Score.Sort((x, y) => -y.CompareTo(x));
+                                            
                                         }       
                             if(_hit.transform.tag == "RestartGame")
                             {
