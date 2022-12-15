@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-
     [SerializeField] private Transform PlayerBody;
 
     [SerializeField] private float _Sensative;
@@ -30,20 +29,21 @@ public class CameraController : MonoBehaviour
         _Camera.Disable();
     }
 
-     private void Update()
+    void Update()
     {
-        Vector2 CameraMove = _Camera.CameraControl.Camera.ReadValue<Vector2>();
-        Camera(CameraMove);
+        Vector2 Camera = _Camera.CameraControl.Camera.ReadValue<Vector2>();
+        Rotate(Camera);
     }
-    private void Camera(Vector3 direction) 
+    public void Rotate(Vector2 axies)
     {
-        float scaleSensative = _Sensative * Time.deltaTime;
-        Vector3 CameraMove = new Vector3(direction.x, 0, direction.y);
-
-        xRotation -= direction.y;
+        float SensCamera = _Sensative * Time.deltaTime;
+        
+        
+        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f); 
+        PlayerBody.Rotate(Vector2.up * axies.x * SensCamera);
+        
+        xRotation -= axies.y;
         xRotation = Mathf.Clamp(xRotation, - 90f, 90f);
-
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        PlayerBody.Rotate(Vector3.up * direction.x * scaleSensative);
     }
+   
 }

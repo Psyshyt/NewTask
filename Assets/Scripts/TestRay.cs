@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class TestRay : MonoBehaviour
-{
+{   
     public Vector3 RestartGame;
 
     public GameObject Leader;
@@ -19,11 +20,7 @@ public class TestRay : MonoBehaviour
 
     public float Running1;
 
-    public float Running2;
-
     public Text Run1;
-
-    public Text Run2;
 
     public Text textTimer;
 
@@ -33,6 +30,8 @@ public class TestRay : MonoBehaviour
 
     bool timerRunning = false;
 
+    public List<float> Score;
+
     private void Start()
     {
         textTimer.text = timeStart.ToString("F2");
@@ -40,12 +39,11 @@ public class TestRay : MonoBehaviour
 
     private void Update()
     {
+        Score.Sort((x, y) => -y.CompareTo(x));
         if (timerRunning == true)
             {
                 timeStart += Time.deltaTime;
                 textTimer.text = timeStart.ToString("F2");
-                Run1.text = Running1.ToString("F2");
-                Run2.text = Running2.ToString("F2");
             }
             if(Input.GetMouseButtonDown(0))
                 {
@@ -58,35 +56,39 @@ public class TestRay : MonoBehaviour
                     if(Physics.Raycast(ray, out _hit, Mathf.Infinity))
                         {      
                             if(_hit.transform.tag == "ButtonFinish")   
-                                {
-                                    Running1 = timeStart;
-                                    Run1.text = Running1.ToString("F2");    
+                                { 
+                                    Run1.text = timeStart.ToString("F2");                            
                                     WallStart.SetActive(true);
                                     Particles.SetActive(true);
                                     timerRunning = false;
                                     RestartButton.SetActive(true);
                                     Leader.SetActive(true);
-                                    Running1 = Running1;
-
-                                   
+                                    Score.Add(timeStart);
+                                    foreach (float Score in Score)
+                                    {
+                                        if (timeStart != Score) 
+                                        {   
+                                            Run1.text += "\n";
+                                            Run1.text += Score;                                           
+                                        }
+                                    }    
                                 }    
                                     if(_hit.transform.tag == "ButtonStart")
-                                        {       
+                                        {   
+                                            timeStart = 0; 
                                             timerRunning = true;
                                             WallStart.SetActive(false);
-                                            TimeHud.SetActive(true);                                                            
+                                            TimeHud.SetActive(true); 
+                                                                                           
                                         } 
 
                                         if(_hit.transform.tag == "Restart")
-                                        {   
-                                            Running2 = timeStart;
+                                        {  
                                             Particles.SetActive(false);
-                                            timeStart = 0;
                                             TimeHud.SetActive(false);
                                             transform.position = RestartRun;               
-                                            Run2.text = Running2.ToString("F2");
                                             Leader.SetActive(false);
-                                            RestartButton.SetActive(false);
+
                                         }       
                             if(_hit.transform.tag == "RestartGame")
                             {
