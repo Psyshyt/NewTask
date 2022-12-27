@@ -26,7 +26,6 @@ public class TimeScore : MonoBehaviour
                 timeStart += Time.deltaTime;
                 textTimer.text = timeStart.ToString("F2");
                 TimeHud.SetActive(true);
-                Score.Sort((x, y) => -y.CompareTo(x));
             }   
             if(Raycast.Finish == true && Input.GetMouseButtonDown(0))
             {
@@ -34,6 +33,7 @@ public class TimeScore : MonoBehaviour
                 {
                     Score.Add(timeStart);
                     Raycast.Finish = false;
+                    Score.Sort((x, y) => -y.CompareTo(x));
                 }
                 Run1.text = timeStart.ToString("F2");
                 TimeHud.SetActive(false);
